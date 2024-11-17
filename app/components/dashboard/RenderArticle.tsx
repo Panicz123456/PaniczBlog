@@ -13,6 +13,7 @@ import Code from "@tiptap/extension-code";
 import BlockQuote from "@tiptap/extension-blockquote";
 import TextStyle from "@tiptap/extension-text-style";
 import CodeBlock from "@tiptap/extension-code-block";
+import OrderList from "@tiptap/extension-ordered-list";
 
 export function RenderArticle({ json }: { json: JSONContent }) {
   const outPut = useMemo(() => {
@@ -29,6 +30,7 @@ export function RenderArticle({ json }: { json: JSONContent }) {
       BlockQuote,
       TextStyle,
       CodeBlock,
+      OrderList,
     ]);
   }, [json]);
 

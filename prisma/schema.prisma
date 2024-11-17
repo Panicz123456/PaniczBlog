@@ -26,6 +26,8 @@ model User {
 
   Site  Site[]
   posts Post[]
+
+  Subscription Subscription?
 }
 
 model Site {
@@ -53,9 +55,22 @@ model Post {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
-  
   User      User?    @relation(fields: [userId], references: [id])
   userId    String?
   Site      Site?    @relation(fields: [siteId], references: [id], onDelete: Cascade)
   siteId    String?
+}
+
+model Subscription {
+  stripeSubscriptionId String   @id @unique
+  interval             String
+  status               String
+  planId               String
+  currentPeriodStart   Int
+  currentPeriodEnd     Int
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String? @unique
 }
