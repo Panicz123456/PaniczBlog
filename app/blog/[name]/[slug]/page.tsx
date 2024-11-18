@@ -7,8 +7,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JSONContent } from "novel";
 
-type Params = Promise<{ locale: "en" | "es" }>;
-
 // Function to get data from the database
 async function getData(slug: string) {
   const data = await prisma.post.findUnique({
@@ -41,7 +39,7 @@ interface SlugRouteParams {
 export default async function SlugRoute({
   params,
 }: {
-  params: SlugRouteParams;
+  params: SlugRouteParams; // params should be destructured from the object passed by Next.js
 }) {
   // Fetching data
   const data = await getData(params.slug);
