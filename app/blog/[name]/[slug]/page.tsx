@@ -7,10 +7,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JSONContent } from "novel";
 
-// Funkcja asynchroniczna do pobierania danych z bazy
 async function getData(slug: string) {
   const data = await prisma.post.findUnique({
-    where: { slug },
+    where: {
+      slug: slug,
+    },
     select: {
       articleContent: true,
       title: true,
@@ -21,23 +22,19 @@ async function getData(slug: string) {
   });
 
   if (!data) {
-    notFound(); // Wywołanie funkcji `notFound`
+    return notFound();
   }
 
   return data;
 }
 
-// Typy dla `params` zgodne z Next.js
-interface PageProps {
-  params: { slug: string; name: string }; // Dynamiczne parametry
-}
-
-// Komponent strony
-export default async function SlugRoute({ params }: PageProps) {
-  // Pobieranie danych
+export default async function SlugRoute({
+  params,
+}: {
+  params: { slug: string; name: string };
+}) {
   const data = await getData(params.slug);
 
-  // Render strony
   return (
     <>
       <div className="flex items-center gap-x-3 pt-10 pb-5">
@@ -52,9 +49,9 @@ export default async function SlugRoute({ params }: PageProps) {
       <div className="flex flex-col items-center justify-center mb-10">
         <div className="m-auto w-full text-center md:w-7/12">
           <p className="m-auto my-5 w-10/12 text-sm font-light text-muted-foreground md:text-base">
-            {new Intl.DateTimeFormat("pl", {
+            {new Intl.DateTimeFormat("en-US", {
               dateStyle: "medium",
-            }).format(new Date(data.createdAt))} {/* Upewnij się, że `createdAt` to Date */}
+            }).format(data.createdAt)}
           </p>
           <h1 className="mb-5 text-3xl font-bold md:text-6xl tracking-tight">
             {data.title}
