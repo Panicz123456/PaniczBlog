@@ -7,6 +7,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JSONContent } from "novel";
 
+// Async function to fetch data based on the slug
 async function getData(slug: string) {
   const data = await prisma.post.findUnique({
     where: {
@@ -28,12 +29,13 @@ async function getData(slug: string) {
   return data;
 }
 
+// The main component for the route
 export default async function SlugRoute({
   params,
 }: {
-  params: { slug: string; name: string };
+  params: { slug: string; name: string }; // Correct type for params
 }) {
-  const data = await getData(params.slug);
+  const data = await getData(params.slug); // Get the data based on the slug
   return (
     <>
       <div className="flex items-center gap-x-3 pt-10 pb-5">
