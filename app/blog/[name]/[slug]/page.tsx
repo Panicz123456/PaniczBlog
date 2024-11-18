@@ -7,8 +7,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JSONContent } from "novel";
 
-type Params = Promise<{locale: "en" | "es" }>;
-// Funkcja do pobrania danych z bazy
+type Params = Promise<{ locale: "en" | "es" }>;
+
+// Function to get data from the database
 async function getData(slug: string) {
   const data = await prisma.post.findUnique({
     where: {
@@ -24,33 +25,32 @@ async function getData(slug: string) {
   });
 
   if (!data) {
-    notFound(); // Obsługa błędu 404
+    notFound(); // Handle 404 error
   }
 
   return data;
 }
 
-// Typ dynamicznych parametrów
+// Type for dynamic route parameters
 interface SlugRouteParams {
   slug: string;
   name: string;
 }
 
-// Komponent obsługujący trasę dynamiczną
-
+// Component for handling the dynamic route
 export default async function SlugRoute({
-  Params,
+  params,
 }: {
-  Params: SlugRouteParams;
+  params: SlugRouteParams;
 }) {
-  // Pobieranie danych
-  const data = await getData(Params.slug);
+  // Fetching data
+  const data = await getData(params.slug);
 
   return (
     <>
       <div className="flex items-center gap-x-3 pt-10 pb-5">
         <Button size="icon" variant="outline" asChild>
-          <Link href={`/blog/${Params.name}`}>
+          <Link href={`/blog/${params.name}`}>
             <ArrowLeft className="size-4" />
           </Link>
         </Button>
