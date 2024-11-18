@@ -7,14 +7,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JSONContent } from "novel";
 
-interface PageProps {
-  params: {
-    slug: string;
-    name: string;
-  };
-}
-
-// Async function to fetch data based on the slug
 async function getData(slug: string) {
   const data = await prisma.post.findUnique({
     where: {
@@ -36,14 +28,12 @@ async function getData(slug: string) {
   return data;
 }
 
-// The main component for the route
-export default async function SlugRoute({ params }: PageProps) {
-  // Ensure that params.slug is available
-  if (!params.slug) {
-    return notFound();
-  }
-
-  const data = await getData(params.slug); // Get the data based on the slug
+export default async function SlugRoute({
+  params,
+}: {
+  params: { slug: string; name: string };
+}) {
+  const data = await getData(params.slug);
 
   return (
     <>
@@ -59,7 +49,7 @@ export default async function SlugRoute({ params }: PageProps) {
       <div className="flex flex-col items-center justify-center mb-10">
         <div className="m-auto w-full text-center md:w-7/12">
           <p className="m-auto my-5 w-10/12 text-sm font-light text-muted-foreground md:text-base">
-            {new Intl.DateTimeFormat("pl", {
+            {new Intl.DateTimeFormat("en-US", {
               dateStyle: "medium",
             }).format(data.createdAt)}
           </p>
