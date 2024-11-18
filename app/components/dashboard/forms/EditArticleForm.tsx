@@ -1,6 +1,5 @@
 "use client";
 
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -31,7 +30,6 @@ interface iAppProps {
     slug: string;
     title: string;
     smallDescription: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     articleContent: any;
     id: string;
     image: string;

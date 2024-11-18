@@ -1,5 +1,4 @@
 import prisma from "@/app/utils/db";
-import { requireUser } from "@/app/utils/requireUser";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import Logo from "@/public/logo.svg";
@@ -11,9 +10,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import Defaultimage from "@/public/default.png";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import Defaultimage from "@/public/default.png";
 
 async function getData(subDir: string) {
   const data = await prisma.site.findUnique({
@@ -59,6 +58,7 @@ export default async function BlogIndexPage({
           <Image src={Logo} alt="Logo" width={40} height={40} />
           <h1 className="text-3xl font-semibold tracking-tight">{data.name}</h1>
         </div>
+
         <div className="col-span-1 flex w-full justify-end">
           <ThemeToggle />
         </div>

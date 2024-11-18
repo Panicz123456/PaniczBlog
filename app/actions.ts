@@ -1,13 +1,12 @@
 "use server";
 
-
+import { redirect } from "next/navigation";
 import { parseWithZod } from "@conform-to/zod";
 import { PostSchema, SiteCreationSchema, siteSchema } from "./utils/zodSchema";
 import prisma from "./utils/db";
 import { requireUser } from "./utils/requireUser";
 import { stripe } from "./utils/stripe";
-import { redirect } from "next/navigation";
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 export async function CreateSiteAction(prevState: any, formData: FormData) {
   const user = await requireUser();
 
@@ -30,27 +29,49 @@ export async function CreateSiteAction(prevState: any, formData: FormData) {
   if (!subStatus || subStatus.status !== "active") {
     if (sites.length < 1) {
       // Allow creating a site
-      await CreateSite();
+      const submission = await parseWithZod(formData, {
+        schema: SiteCreationSchema({
+          async isSubdirectoryUnique() {
+            const exisitngSubDirectory = await prisma.site.findUnique({
+              where: {
+                subdirectory: formData.get("subdirectory") as string,
+              },
+            });
+            return !exisitngSubDirectory;
+          },
+        }),
+        async: true,
+      });
+
+      if (submission.status !== "success") {
+        return submission.reply();
+      }
+
+      const response = await prisma.site.create({
+        data: {
+          description: submission.value.description,
+          name: submission.value.name,
+          subdirectory: submission.value.subdirectory,
+          userId: user.id,
+        },
+      });
+
+      return redirect("/dashboard/sites");
     } else {
-      // user already has one site dont allow
+      // user alredy has one site dont allow
       return redirect("/dashboard/pricing");
     }
   } else if (subStatus.status === "active") {
-    // User has a active plan he can create sites
-    await CreateSite();
-  }
-
-  async function CreateSite() {
+    // User has a active plan he can create sites...
     const submission = await parseWithZod(formData, {
       schema: SiteCreationSchema({
         async isSubdirectoryUnique() {
-          const existingSubDirectory = await prisma.site.findFirst({
+          const exisitngSubDirectory = await prisma.site.findUnique({
             where: {
               subdirectory: formData.get("subdirectory") as string,
             },
           });
-
-          return !existingSubDirectory;
+          return !exisitngSubDirectory;
         },
       }),
       async: true,
@@ -68,10 +89,9 @@ export async function CreateSiteAction(prevState: any, formData: FormData) {
         userId: user.id,
       },
     });
+    return redirect("/dashboard/sites");
   }
-  return redirect("/dashboard/sites");
 }
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function CreatePostAction(prevState: any, formData: FormData) {
   const user = await requireUser();
 
@@ -126,7 +146,7 @@ export async function EditPostActions(prevState: any, formData: FormData) {
   return redirect(`/dashboard/sites/${formData.get("siteId")}`);
 }
 
-export async function DeletePostAction(formData: FormData) {
+export async function DeletePost(formData: FormData) {
   const user = await requireUser();
 
   const data = await prisma.post.delete({
@@ -142,7 +162,7 @@ export async function DeletePostAction(formData: FormData) {
 export async function UpdateImage(formData: FormData) {
   const user = await requireUser();
 
-  const data = prisma.site.update({
+  const data = await prisma.site.update({
     where: {
       userId: user.id,
       id: formData.get("siteId") as string,
@@ -157,6 +177,7 @@ export async function UpdateImage(formData: FormData) {
 
 export async function DeleteSite(formData: FormData) {
   const user = await requireUser();
+
   const data = await prisma.site.delete({
     where: {
       userId: user.id,
@@ -207,8 +228,14 @@ export async function CreateSubscription() {
       address: "auto",
       name: "auto",
     },
-    success_url: "http://localhost:3000/dashboard/payment/sucess",
-    cancel_url: "http://localhost:3000/dashboard/payment/cancelled",
+    success_url:
+      process.env.NODE_ENV === "production"
+        ? "https://blog-marshal.vercel.app/dashboard/payment/success"
+        : "http://localhost:3000/dashboard/payment/success",
+    cancel_url:
+      process.env.NODE_ENV === "production"
+        ? "https://blog-marshal.vercel.app/dashboard/payment/cancelled"
+        : "http://localhost:3000/dashboard/payment/cancelled",
   });
 
   return redirect(session.url as string);

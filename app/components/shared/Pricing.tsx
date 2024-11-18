@@ -9,8 +9,8 @@ import {
 } from "@/components/ui/card";
 import { Check } from "lucide-react";
 import { SubmitButton } from "../dashboard/SubmitButtons";
-import { CreateSubscription } from "@/app/actions";
 import Link from "next/link";
+import { CreateSubscription } from "@/app/actions";
 
 interface iAppProps {
   id: number;
@@ -40,9 +40,9 @@ export const PricingPlans: iAppProps[] = [
     priceTitle: "$29",
     benefits: [
       "Unlimited Sites",
-      "Unlimited Visitors",
-      "Unlimited Visitors",
-      "Unlimited Visitors",
+      "Unimlited Visitors",
+      "Unimlited Visitors",
+      "Unimlited Visitors",
     ],
   },
 ];
@@ -58,9 +58,8 @@ export function PricingTable() {
       </div>
 
       <p className="mx-auto mt-6 max-w-2xl text-center leading-tight text-muted-foreground">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae quam
-        minima consequatur id fugiat facere quisquam autem sunt voluptatem
-        laborum.
+        Distinctio et nulla eum soluta et neque labore quibusdam. Saepe et quasi
+        iusto modi velit ut non voluptas in. Explicabo id ut laborum.
       </p>
 
       <div className="grid grid-cols-1 gap-8 mt-16 lg:grid-cols-2">
@@ -99,12 +98,12 @@ export function PricingTable() {
             </CardContent>
             <CardFooter>
               {item.id === 1 ? (
-                <form action={CreateSubscription} className="w-full">
+                <form className="w-full" action={CreateSubscription}>
                   <SubmitButton text="Buy Plan" className="mt-5 w-full" />
                 </form>
               ) : (
                 <Button variant="outline" className="mt-5 w-full" asChild>
-                  <Link href="/dashboard">Try for Free</Link>
+                  <Link href="/dashboard">Try for free</Link>
                 </Button>
               )}
             </CardFooter>
