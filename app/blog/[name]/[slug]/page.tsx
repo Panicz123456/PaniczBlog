@@ -7,6 +7,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JSONContent } from "novel";
 
+// Funkcja do pobrania danych z bazy
 async function getData(slug: string) {
   const data = await prisma.post.findUnique({
     where: {
@@ -22,19 +23,26 @@ async function getData(slug: string) {
   });
 
   if (!data) {
-    return notFound();
+    notFound(); // Obsługa błędu 404
   }
 
   return data;
 }
 
+// Typ dynamicznych parametrów
+interface SlugRouteParams {
+  slug: string;
+  name: string;
+}
+
+// Komponent obsługujący trasę dynamiczną
 export default async function SlugRoute({
-  params: rawParams,
+  params,
 }: {
-  params: { slug: string; name: string };
+  params: SlugRouteParams;
 }) {
-  const params = await Promise.resolve(rawParams); 
-  const data = await getData(params.slug); 
+  // Pobieranie danych
+  const data = await getData(params.slug);
 
   return (
     <>
@@ -52,7 +60,7 @@ export default async function SlugRoute({
           <p className="m-auto my-5 w-10/12 text-sm font-light text-muted-foreground md:text-base">
             {new Intl.DateTimeFormat("en-US", {
               dateStyle: "medium",
-            }).format(data.createdAt)}
+            }).format(new Date(data.createdAt))}
           </p>
           <h1 className="mb-5 text-3xl font-bold md:text-6xl tracking-tight">
             {data.title}
