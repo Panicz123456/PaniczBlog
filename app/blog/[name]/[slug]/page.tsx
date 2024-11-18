@@ -29,11 +29,12 @@ async function getData(slug: string) {
 }
 
 export default async function SlugRoute({
-  params,
+  params: rawParams,
 }: {
   params: { slug: string; name: string };
 }) {
-  const data = await getData(params.slug);
+  const params = await Promise.resolve(rawParams); 
+  const data = await getData(params.slug); 
 
   return (
     <>
