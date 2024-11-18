@@ -31,6 +31,7 @@ interface iAppProps {
     slug: string;
     title: string;
     smallDescription: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     articleContent: any;
     id: string;
     image: string;

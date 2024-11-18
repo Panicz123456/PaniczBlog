@@ -6,7 +6,7 @@ import { PostSchema, SiteCreationSchema, siteSchema } from "./utils/zodSchema";
 import prisma from "./utils/db";
 import { requireUser } from "./utils/requireUser";
 import { stripe } from "./utils/stripe";
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function CreateSiteAction(prevState: any, formData: FormData) {
   const user = await requireUser();
 
@@ -70,7 +70,7 @@ export async function CreateSiteAction(prevState: any, formData: FormData) {
   }
   return redirect("/dashboard/sites");
 }
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function CreatePostAction(prevState: any, formData: FormData) {
   const user = await requireUser();
 
