@@ -1,7 +1,7 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"],
+  "extends": "next",
   "rules": {
-    "@typescript-eslint/no-unused-vars": "warn", // zmienia błąd na ostrzeżenie
-    "@typescript-eslint/no-explicit-any": "off" // wyłącza regułę
+    "react/no-unescaped-entities": "off",
+    "@next/next/no-page-custom-font": "off"
   }
 }
