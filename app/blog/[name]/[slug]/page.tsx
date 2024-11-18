@@ -6,8 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JSONContent } from "novel";
-
-// Function to get data from the database
+Promise<any>
 async function getData(slug: string) {
   const data = await prisma.post.findUnique({
     where: {
@@ -23,27 +22,18 @@ async function getData(slug: string) {
   });
 
   if (!data) {
-    notFound(); // Handle 404 error
+    return notFound();
   }
 
   return data;
 }
 
-// Type for dynamic route parameters
-interface SlugRouteParams {
-  slug: string;
-  name: string;
-}
-
-// Component for handling the dynamic route
 export default async function SlugRoute({
   params,
 }: {
-  params: SlugRouteParams; // params should be destructured from the object passed by Next.js
+  params: { slug: string; name: string };
 }) {
-  // Fetching data
   const data = await getData(params.slug);
-
   return (
     <>
       <div className="flex items-center gap-x-3 pt-10 pb-5">
@@ -58,9 +48,9 @@ export default async function SlugRoute({
       <div className="flex flex-col items-center justify-center mb-10">
         <div className="m-auto w-full text-center md:w-7/12">
           <p className="m-auto my-5 w-10/12 text-sm font-light text-muted-foreground md:text-base">
-            {new Intl.DateTimeFormat("en-US", {
+            {new Intl.DateTimeFormat("pl", {
               dateStyle: "medium",
-            }).format(new Date(data.createdAt))}
+            }).format(data.createdAt)}
           </p>
           <h1 className="mb-5 text-3xl font-bold md:text-6xl tracking-tight">
             {data.title}
