@@ -7,6 +7,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JSONContent } from "novel";
 
+type Params = Promise<{locale: "en" | "es" }>;
 // Funkcja do pobrania danych z bazy
 async function getData(slug: string) {
   const data = await prisma.post.findUnique({
@@ -36,19 +37,20 @@ interface SlugRouteParams {
 }
 
 // Komponent obsługujący trasę dynamiczną
+
 export default async function SlugRoute({
-  params,
+  Params,
 }: {
-  params: SlugRouteParams;
+  Params: SlugRouteParams;
 }) {
   // Pobieranie danych
-  const data = await getData(params.slug);
+  const data = await getData(Params.slug);
 
   return (
     <>
       <div className="flex items-center gap-x-3 pt-10 pb-5">
         <Button size="icon" variant="outline" asChild>
-          <Link href={`/blog/${params.name}`}>
+          <Link href={`/blog/${Params.name}`}>
             <ArrowLeft className="size-4" />
           </Link>
         </Button>
