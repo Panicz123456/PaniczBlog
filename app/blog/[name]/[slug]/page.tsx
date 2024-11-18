@@ -14,7 +14,6 @@ interface PageProps {
   };
 }
 
-
 // Async function to fetch data based on the slug
 async function getData(slug: string) {
   const data = await prisma.post.findUnique({
@@ -39,7 +38,13 @@ async function getData(slug: string) {
 
 // The main component for the route
 export default async function SlugRoute({ params }: PageProps) {
+  // Ensure that params.slug is available
+  if (!params.slug) {
+    return notFound();
+  }
+
   const data = await getData(params.slug); // Get the data based on the slug
+
   return (
     <>
       <div className="flex items-center gap-x-3 pt-10 pb-5">
