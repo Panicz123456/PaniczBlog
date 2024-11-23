@@ -28,25 +28,18 @@ async function getData(slug: string) {
   return data;
 }
 
-// Typ `PageProps`
-type PageProps = {
-  params: {
-    slug: string;
-    name: string;
-  };
-};
-
-export default async function SlugRoute({ params }: PageProps) {
-  // Obsługa przypadków, gdy params jest Promise
-  const resolvedParams = params instanceof Promise ? await params : params;
-
-  const data = await getData(resolvedParams.slug);
+export default async function SlugRoute({
+  params,
+}: {
+  params: { slug: string; name: string };
+}) {
+  const data = await getData(params.slug);
 
   return (
     <>
       <div className="flex items-center gap-x-3 pt-10 pb-5">
         <Button size="icon" variant="outline" asChild>
-          <Link href={`/blog/${resolvedParams.name}`}>
+          <Link href={`/blog/${params.name}`}>
             <ArrowLeft className="size-4" />
           </Link>
         </Button>
