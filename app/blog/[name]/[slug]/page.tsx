@@ -31,7 +31,7 @@ async function getData(slug: string) {
 export default async function SlugRoute({
   params,
 }: {
-  params: { slug: string; name: string };
+  params: {name: string; slug: string };
 }) {
   const data = await getData(params.slug);
 
