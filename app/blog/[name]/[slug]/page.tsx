@@ -37,13 +37,16 @@ type PageProps = {
 };
 
 export default async function SlugRoute({ params }: PageProps) {
-  const data = await getData(params.slug);
+  // Obsługa przypadków, gdy params jest Promise
+  const resolvedParams = params instanceof Promise ? await params : params;
+
+  const data = await getData(resolvedParams.slug);
 
   return (
     <>
       <div className="flex items-center gap-x-3 pt-10 pb-5">
         <Button size="icon" variant="outline" asChild>
-          <Link href={`/blog/${params.name}`}>
+          <Link href={`/blog/${resolvedParams.name}`}>
             <ArrowLeft className="size-4" />
           </Link>
         </Button>
