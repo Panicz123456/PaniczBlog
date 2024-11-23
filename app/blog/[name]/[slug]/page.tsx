@@ -28,13 +28,13 @@ async function getData(slug: string) {
   return data;
 }
 
-// Typowanie dynamicznej trasy w Next.js
-interface PageProps {
+// Typ `PageProps`
+type PageProps = {
   params: {
-    name: string;
     slug: string;
+    name: string;
   };
-}
+};
 
 export default async function SlugRoute({ params }: PageProps) {
   const data = await getData(params.slug);
