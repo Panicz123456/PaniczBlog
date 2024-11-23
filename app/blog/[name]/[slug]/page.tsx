@@ -7,14 +7,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JSONContent } from "novel";
 
-// Define the type for params
-interface SlugRouteParams {
-  params: {
-    name: string;
-    slug: string;
-  };
-}
-
 async function getData(slug: string) {
   const data = await prisma.post.findUnique({
     where: {
@@ -36,7 +28,15 @@ async function getData(slug: string) {
   return data;
 }
 
-export default async function SlugRoute({ params }: SlugRouteParams) {
+// Typowanie dynamicznej trasy w Next.js
+interface PageProps {
+  params: {
+    name: string;
+    slug: string;
+  };
+}
+
+export default async function SlugRoute({ params }: PageProps) {
   const data = await getData(params.slug);
 
   return (
