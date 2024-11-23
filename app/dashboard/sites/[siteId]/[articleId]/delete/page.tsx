@@ -1,4 +1,4 @@
-import { DeletePostAction } from "@/app/actions";
+import { DeletePost } from "@/app/actions";
 import { SubmitButton } from "@/app/components/dashboard/SubmitButtons";
 import { Button } from "@/components/ui/button";
 import {
@@ -32,7 +32,7 @@ export default function DeleteForm({
           <Button asChild variant="secondary">
             <Link href={`/dashboard/sites/${params.siteId}`}>Cancel</Link>
           </Button>
-          <form action={DeletePostAction}>
+          <form action={DeletePost}>
             <input type="hidden" name="articleId" value={params.articleId} />
             <input type="hidden" name="siteId" value={params.siteId} />
             <SubmitButton variant="destructive" text="Delete Article" />
